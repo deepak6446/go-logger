@@ -15,26 +15,25 @@ import (
 )
 
 type LoggerStack struct {
+    
     lock                sync.Mutex
-    filename            string                             
+    Filename            string                             
     fp                  *os.File
-    async               bool
+    Async               bool
     currentFileIndex    int 
     bytesLength         int 
-    maxSizeInBytes      int 
+    MaxSizeInBytes      int 
+
 }
 
 type JsonLog map[string]string
 var Logger *LoggerStack
 var json JsonLog 
 
-// Make a new LoggerStack. Return nil if error occurs during setup.
-// func Init(filename string, async bool, maxSize int) {
-func Init(filename string, async bool, maxSize int) {
-
-    maxInBytes := 1000000 * maxSize
-    Logger = &LoggerStack{filename: filename, async: async, maxSizeInBytes: maxInBytes}
-
+// func Init(Filename string, Async bool, maxSize int) {
+func Init(info *LoggerStack) {
+    
+    Logger = info
     Logger.currentFileIndex = 0
     
     Logger.lock.Lock()
@@ -51,7 +50,7 @@ func Init(filename string, async bool, maxSize int) {
 func Info(v ...interface{}) {
     
     output := fmt.Sprint(v...)
-    if Logger.async == true { 
+    if Logger.Async == true { 
         go logFile(output, "INFO") 
     }else {
         logFile(output, "INFO")
@@ -63,7 +62,7 @@ func Info(v ...interface{}) {
 func Error(v ...interface{}) {
     
     output := fmt.Sprint(v...)
-    if Logger.async == true {
+    if Logger.Async == true {
         go logFile(output, "ERROR") 
     }else {
         logFile(output, "ERROR")
@@ -75,7 +74,7 @@ func Error(v ...interface{}) {
 func Log(v ...interface{}) {
     
     output := fmt.Sprint(v...)
-    if Logger.async == true {
+    if Logger.Async == true {
         go logFile(output, "LOG") 
     }else {
         logFile(output, "LOG")
@@ -87,7 +86,7 @@ func Log(v ...interface{}) {
 func Warn(v ...interface{}) {
     
     output := fmt.Sprint(v...)
-    if Logger.async == true {
+    if Logger.Async == true {
         go logFile(output, "WARN") 
     }else {
         logFile(output, "WARN")
@@ -115,6 +114,7 @@ func logFile(message string, level string) {
 }
 
 func getColor(level string) (string) {
+    
     switch level {
 	case "INFO":
 		return "\x1b[32;1m";   
@@ -126,7 +126,8 @@ func getColor(level string) (string) {
         return "\x1b[33;1m";
 	default:
 		return ""
-	}
+    }
+    
 }
 
 func logToFile(json JsonLog) {
@@ -141,17 +142,17 @@ func logToFile(json JsonLog) {
 
 func makeFile() (err error) {
   
-    var fileName string
-
-    preFix := Logger.filename[:strings.LastIndex(Logger.filename, ".json")]
+    var FileName string
+    
+    preFix := Logger.Filename[:strings.LastIndex(Logger.Filename, ".json")]
     if Logger.currentFileIndex == 0 {
-        fileName = preFix  + ".json"
+        FileName = preFix  + ".json"
     }else {
-        fileName = preFix + strconv.Itoa(Logger.currentFileIndex) + ".json"
+        FileName = preFix + strconv.Itoa(Logger.currentFileIndex) + ".json"
     }
     
-    fmt.Println("creating new log file: ",fileName)
-    Logger.fp, err = os.OpenFile(fileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600) // read and write
+    fmt.Println("creating new log file: ",FileName)
+    Logger.fp, err = os.OpenFile(FileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600) // read and write
     
     return
 
@@ -162,7 +163,7 @@ func rotate(len int) (err error) {
     
     Logger.bytesLength = Logger.bytesLength + len
     
-    if Logger.bytesLength > Logger.maxSizeInBytes {
+    if Logger.bytesLength > Logger.MaxSizeInBytes {
         Logger.currentFileIndex++
         Logger.bytesLength = 0
 
@@ -177,7 +178,7 @@ func Close() (err error) {
     
     if Logger.fp != nil {
         
-        fmt.Println("Closing log file at: ", Logger.filename)
+        fmt.Println("Closing log file at: ", Logger.Filename)
         err = Logger.fp.Close()
         Logger.fp = nil
         
