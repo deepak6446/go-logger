@@ -13,20 +13,15 @@ Set up is as simple as:
 1. Install package </br>
 go get github.com/deepak6446/go-logger/logger
 
-2. import "logger"</br>
-var Logger *logger.LoggerStack
-
-	Logger = &logger.LoggerStack{
-	
-		Filename: "./logs/logs.json", 		// file name 
-		
-		Async: false,                       // files will be created asynchronous if set to true
-		
-		MaxSizeInBytes: 1000000,            // 1 MB
-		
-	}
-	
-
+2. import "logger" </br>
+var Logger *logger.LoggerStack </br>
+Logger = &logger.LoggerStack{</br>
+<pre>
+	Filename: "./logs/logs.json", 		// file name 
+	Async: false,                       // files will be created asynchronous if set to true 
+	</t>MaxSizeInBytes: 1000000,            // 1 MB 
+</pre> </br>
+}</br>
 logger.Init(Logger)
 
 3. log using</br>
