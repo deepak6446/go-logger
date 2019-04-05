@@ -20,7 +20,7 @@ Logger = &logger.LoggerStack{</br>
 	Filename: "./logs/logs.json", 		// file name 
 	Async: false,                       // files will be created asynchronous if set to true 
 	</t>MaxSizeInBytes: 1000000,            // 1 MB 
-</pre> </br>
+</pre>
 }</br>
 logger.Init(Logger)
 
