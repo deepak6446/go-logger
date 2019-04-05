@@ -10,12 +10,10 @@ logging library for go with following features.
 Set up is as simple as:
 [example][examples/main.go]
 
-1. Install package
-
+1. Install package </br>
 go get github.com/deepak6446/go-logger/logger
 
-2. import "logger"
-
+2. import "logger"</br>
 var Logger *logger.LoggerStack
 
 	Logger = &logger.LoggerStack{
@@ -31,6 +29,5 @@ var Logger *logger.LoggerStack
 
 logger.Init(Logger)
 
-3. log using 
-
+3. log using</br>
 logger.Info("Info level log");
