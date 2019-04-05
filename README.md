@@ -5,7 +5,7 @@ logging library for go with following features.
 2. Each log can be created in async mode ( prefer using only when logging in main goroutine ).
 3. color code's for diffrent level log file.
 
-[example](examples/console.png)
+[![Example Output](examples/example.png)](examples/example.go)
 
 Set up is as simple as:
 [example][examples/main.go]
