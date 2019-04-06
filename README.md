@@ -1,9 +1,9 @@
 ## Logging in Golang 
 
 logging library for go with following features.
-1. Specify file size for each log file and Create new log file when file size is exceded.
-2. Each log can be created in async mode ( prefer using only when logging in main goroutine ).
-3. color code's for diffrent level log file.
+1. Specify file size for each log file and Create new log file when file size is exceeded.
+2. Each log can be created in async mode ( prefer using only when logging in the main goroutine ).
+3. color code's for different level log file.
 
 [![Console](/examples/console.png)](examples/example.go)
 
