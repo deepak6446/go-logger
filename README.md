@@ -5,10 +5,10 @@ logging library for go with following features.
 2. Each log can be created in async mode ( prefer using only when logging in main goroutine ).
 3. color code's for diffrent level log file.
 
-[example](examples/console.png)
+[example](/examples/console.png)
 
 Set up is as simple as:
-[example][examples/main.go]
+[example](/examples/main.go)
 
 1. Install package
 
@@ -28,3 +28,7 @@ logger.Init(Logger)
 3. log using 
 
 logger.Info("Info level log");
+
+```
+NOTE: using Async: true only when using large  logging in main thread. In thread using Async true will cause creation of a new thread for each log.
+```
