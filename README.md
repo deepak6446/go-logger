@@ -15,18 +15,19 @@ go get github.com/deepak6446/go-logger/logger
 
 2. import "logger" </br>
 var Logger *logger.LoggerStack </br>
-Logger = &logger.LoggerStack{</br>
 <pre>
+Logger = &logger.LoggerStack{</br>
 	Filename: "./logs/logs.json", 		// file name 
 	Async: false,                       // files will be created asynchronous if set to true 
 	</t>MaxSizeInBytes: 1000000,            // 1 MB 
+}
 </pre>
-}</br>
+
 logger.Init(Logger)
 
 3. log using</br>
 logger.Info("Info level log");
 
 ```
-NOTE: using Async: true only when using large  logging in main thread. In thread using Async true will cause creation of a new thread for each log.
+NOTE: use Async: true only when using large logging in main thread. In thread using Async true will cause creation of a new thread for each log.
 ```
