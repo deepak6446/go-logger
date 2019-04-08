@@ -5,10 +5,10 @@ logging library for go with following features.
 2. Each log can be created in async mode ( prefer using only when logging in the main goroutine ).
 3. color code's for different level log file.
 
-[example](/examples/console.png)
+[![Example Output](/examples/console.png)
 
 Set up is as simple as:
-[example](/examples/main.go)
+[![Example](/examples/main.go)
 
 1. Install package </br>
 go get github.com/deepak6446/go-logger/logger
