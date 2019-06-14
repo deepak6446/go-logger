@@ -1,0 +1,10 @@
+{"level":"LOG","message":"hola!, working","time":"2019-06-14 15:59:26.321845014 +0530 IST m=+0.000524731"}
+{"level":"INFO","message":"Info  level log","time":"2019-06-14 15:59:26.322028199 +0530 IST m=+0.000707895"}
+{"level":"WARN","message":"Warn  level log","time":"2019-06-14 15:59:26.322037521 +0530 IST m=+0.000717196"}
+{"level":"ERROR","message":"Error level log","time":"2019-06-14 15:59:26.322063844 +0530 IST m=+0.000743518"}
+{"level":"LOG","message":"hola!, working","time":"2019-06-14 15:59:29.027474114 +0530 IST m=+0.000446499"}
+{"level":"INFO","message":"Info  level log","time":"2019-06-14 15:59:29.027683704 +0530 IST m=+0.000656062"}
+{"level":"WARN","message":"Warn  level log","time":"2019-06-14 15:59:29.0276937 +0530 IST m=+0.000666064"}
+{"level":"ERROR","message":"Error level log","time":"2019-06-14 15:59:29.027721111 +0530 IST m=+0.000693473"}
+{"level":"LOG","message":"hola!, working","time":"2019-06-14 15:59:45.250666929 +0530 IST m=+0.000656286"}
+{"level":"INFO","message":"Info  level log","time":"2019-06-14 15:59:45.250998294 +0530 IST m=+0.000987618"}

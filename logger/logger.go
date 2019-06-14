@@ -9,6 +9,7 @@ import (
     "log"
     "strings"
     "strconv"
+    "io"
 
     js "encoding/json"
     
@@ -21,8 +22,8 @@ type LoggerStack struct {
     fp                  *os.File
     Async               bool
     currentFileIndex    int 
-    bytesLength         int 
-    MaxSizeInBytes      int 
+    bytesLength         int64 
+    MaxSizeInBytes      int64 
 
 }
 
@@ -129,14 +130,14 @@ func getColor(level string) (string) {
     }
     
 }
-
+var currentFile string
 func logToFile(json JsonLog) {
 
     bytes, _ := js.Marshal(json)
     Logger.fp.Write(bytes)
     Logger.fp.Write([]byte("\n"))
     
-    rotate(len(bytes))
+    rotate(int64(len(bytes)))
 
 } 
 
@@ -149,25 +150,78 @@ func makeFile() (err error) {
         FileName = preFix  + ".json"
     }else {
         FileName = preFix + strconv.Itoa(Logger.currentFileIndex) + ".json"
+        return moveFile(FileName, preFix  + ".json")
+    }
+
+    fmt.Println("creating new log file: ",FileName)
+
+    Logger.fp, err = os.OpenFile(FileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666) // read and write
+    if err !=  nil {
+        fmt.Println("error in openfile error: ", err)
+    }else {
+        Logger.bytesLength = fileSize(Logger.fp)
     }
     
-    fmt.Println("creating new log file: ",FileName)
-    Logger.fp, err = os.OpenFile(FileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600) // read and write
-    
-    return
+    return err
 
 }
 
-// Perform the actual act of rotating and reopening file.
-func rotate(len int) (err error) {
+func fileSize(fp *os.File) int64 {
+    fi, err := fp.Stat()
+    if err != nil {
+      // Could not obtain stat, handle error
+    }
+    return fi.Size()
+}
+
+func moveFile(destFileName string, scrFileName string) (error error) {
     
+    var destFile, srcFile *os.File
+
+    Close()
+    destFile, error = os.OpenFile(destFileName, os.O_CREATE|os.O_RDWR, 0666) // read and write
+    srcFile, error = os.OpenFile(scrFileName, os.O_RDWR, 0666) // read and write
+       
+    if error != nil { 
+        fmt.Println("error in create file srcFile: ", scrFileName, "destFile: ", destFileName)
+        fmt.Println(" error: ", error)
+        return error;      
+    }
+
+    if _, error = io.Copy(destFile, srcFile/*, scrFile*/); error != nil {
+        fmt.Println("error in fileCopy src: ", scrFileName, "dest: ", destFileName)
+        fmt.Println("error: ", error)
+		return 
+    }
+
+    defer destFile.Close()
+    srcFile.Truncate(0)
+    
+    error = os.Truncate(scrFileName, 0)
+	if error != nil {
+		fmt.Println("error in deleting file content, error: ", error)
+	}
+
+    Logger.fp = nil
+    Logger.fp, error = os.OpenFile(scrFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666) // read and write
+    if error !=  nil {
+        fmt.Println("error in openfile error: ", error)
+    }
+
+    return 
+}
+
+// Perform the actual act of rotating and reopening file.
+func rotate(len int64) (err error) {
     Logger.bytesLength = Logger.bytesLength + len
     
     if Logger.bytesLength > Logger.MaxSizeInBytes {
         Logger.currentFileIndex++
         Logger.bytesLength = 0
 
-        makeFile()
+        if err := makeFile(); err != nil {
+            fmt.Println("error in creating new file", err)
+        }
 
     }
     
@@ -178,7 +232,6 @@ func Close() (err error) {
     
     if Logger.fp != nil {
         
-        fmt.Println("Closing log file at: ", Logger.Filename)
         err = Logger.fp.Close()
         Logger.fp = nil
         
